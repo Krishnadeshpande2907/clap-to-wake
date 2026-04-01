@@ -161,13 +161,13 @@ All configuration is currently hardcoded in the `initialModel()` function in `ma
 
 | Configuration | Default Value | Type | Description |
 |---|---|---|---|
-| `TargetApps` | `["code", "chrome", "cursor", "browser", "vlc", "msedge"]` | `[]string` | List of application names to monitor (case-insensitive substring match) |
-| `Threshold` | `0.25` | `float32` | Audio sensitivity threshold for clap detection (0.0 = silent, 1.0 = loud). Based on RMS (Root Mean Square) calculation of audio samples. |
-| `IdleLimit` | `300` | `uint32` | Time in seconds before idle check expires (currently disabled). Default is 5 minutes. |
+| TargetApps | `["code", "chrome", "cursor", "browser", "vlc", "msedge"]` | `[]string` | List of application names to monitor (case-insensitive substring match) |
+| Threshold | `0.25` | `float32` | Audio sensitivity threshold for clap detection (0.0 = silent, 1.0 = loud). Based on RMS (Root Mean Square) calculation of audio samples. |
+| IdleLimit | `300` | `uint32` | Time in seconds before idle check expires (currently disabled). Default is 5 minutes. |
 | Sample Rate | `44100` | `uint32` (hardcoded) | Audio capture sample rate in Hz. Can be modified in `listenForAudio()`. |
-| Audio Format | `FormatF32` | enum (hardcoded) | Audio format is 32-bit float. Defined in `listenForAudio()`. |
-| Audio Channels | `1` | uint8 (hardcoded) | Mono input. Can be modified in `listenForAudio()`. |
-| Listen Timeout | `5` | seconds (hardcoded) | How long to listen for a clap before returning to app monitoring (5 seconds). Set in `listenForAudio()`. |
+| Audio Format | `FormatF32` | `enum` (hardcoded) | Audio format is 32-bit float. Defined in `listenForAudio()`. |
+| Audio Channels | `1` | `uint8` (hardcoded) | Mono input. Can be modified in `listenForAudio()`. |
+| Listen Timeout | `5` | `seconds` (hardcoded) | How long to listen for a clap before returning to app monitoring (5 seconds). Set in `listenForAudio()`. |
 
 ### Example: Modifying configuration
 
@@ -199,11 +199,11 @@ clap-to-wake/
 │                        # - Audio capture and clap detection (malgo)
 │                        # - System wake logic via mouse/keyboard (robotgo)
 │                        # - Audio byte-to-float32 conversion helpers
-├── go.mod              # Module definition (module: clap-to-wake, Go 1.25.6)
-├── go.sum              # Dependency checksums and versions
-├── .git/               # Git repository metadata
-├── .gitignore          # Git ignore rules
-└── clap-to-wake        # Compiled binary (generated after build)
+├── go.mod               # Module definition (module: clap-to-wake, Go 1.25.6)
+├── go.sum               # Dependency checksums and versions
+├── .git/                # Git repository metadata
+├── .gitignore           # Git ignore rules
+└── clap-to-wake         # Compiled binary (generated after build)
 ```
 
 ### Code organization within main.go:
@@ -264,24 +264,6 @@ Alternatively, run directly without building:
 go run ./main.go
 ```
 
-### Code quality and linting
-
-While no linting configuration is committed, recommended tools for development:
-
-```bash
-# Install golangci-lint (all-in-one linter)
-go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-
-# Run linting
-golangci-lint run ./...
-
-# Run Go's built-in vet tool
-go vet ./...
-
-# Format code to Go standards
-go fmt ./...
-```
-
 ### Debugging audio issues
 
 If the application fails to detect audio or microphone:
@@ -305,48 +287,6 @@ If the application fails to detect audio or microphone:
 - **Clap detection sensitivity**: Adjust `cfg.Threshold` in `initialModel()`
 - **System wake action**: Modify the wake logic in `listenForAudio()` where `robotgo.Move()` and `robotgo.KeyTap()` are called
 
-## Testing
-
-### Unit testing
-
-The codebase currently has **no automated tests**. To add tests:
-
-```bash
-# Create a test file
-touch main_test.go
-
-# Run all tests
-go test ./...
-
-# Run with verbose output and coverage
-go test -v -cover ./...
-
-# Run tests with race condition detection
-go test -race ./...
-```
-
-### Manual testing suggestions
-
-1. **Application detection**:
-   - Open one of the target applications (e.g., VS Code)
-   - Verify the TUI shows the app name in the status
-   - Quit the app and verify status shows "Target apps not running..."
-
-2. **Audio capture**:
-   - Launch with target app running
-   - Wait for "Active Listener (Mic On)" state
-   - Make a loud noise or clap near the microphone
-   - Observe microphone level in the progress bar
-
-3. **Sensitivity tuning**:
-   - Edit `Threshold` in the code
-   - Rebuild and test with background noise at different levels
-   - Find the optimal threshold to avoid false positives
-
-4. **System wake**:
-   - Verify that after clap detection, the system wakes up
-   - Monitor mouse movement and keyboard input using system tools
-
 ## Known Issues
 
 1. **IdleTime not available in robotgo v1.0.2**:
@@ -366,9 +306,5 @@ go test -race ./...
 4. **Cross-compilation challenges**:
    - CGO dependencies (malgo, robotgo) generally require native compilation
    - Windows/Linux/macOS builds may have platform-specific audio/system call issues
-
-5. **Offensive exit message**:
-   - The exit message in `View()` contains potentially offensive language
-   - Consider replacing with a friendly message for production use
 
 ---

@@ -101,7 +101,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	if m.quitting {
-		return "\n  Yeah! You better get to work, Nigga!! \n\n"
+		return "\n  Yeah! You better get to work! \n\n"
 	}
 
 	stateName := ""
