@@ -1,0 +1,9 @@
+# Binaries
+clap-to-wake
+clap-to-wake.exe
+*.exe
+*.bin
+
+# OS generated files
+.DS_Store
+Thumbs.db
